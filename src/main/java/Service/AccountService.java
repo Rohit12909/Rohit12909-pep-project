@@ -26,8 +26,36 @@ public class AccountService
         this.accountDAO = accountDAO;
     }
 
-
+    /**
+     * Create new account, check if it already exists in the database
+     * @param account
+     * @return newly created account
+     */
     public Account createAccount(Account account)
+    {
+        
+        if ((!account.getUsername().isBlank()) && (account.getPassword().length() >= 4) && !AccountExists(account))
+        {
+            return accountDAO.createAccount(account);
+        }      
+
+        return null;
+    }
+
+    /**
+     * Login to an already existing account
+     */
+    public Account loginAccount(Account account)
+    {
+        if (AccountExists(account))
+        {
+            return accountDAO.loginAccount(account);
+        }
+        
+        return null;
+    }
+
+    private boolean AccountExists(Account account)
     {
         List<Account> allAccounts = accountDAO.getAllAccounts();
         boolean exists = false;
@@ -40,13 +68,7 @@ public class AccountService
                 break;
             }
         }
- 
-        if ((!account.getUsername().isBlank()) && (account.getPassword().length() >= 4) && !exists)
-        {
-            return accountDAO.createAccount(account);
-        }      
 
-        return null;
+        return exists;
     }
-    
 }
