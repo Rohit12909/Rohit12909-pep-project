@@ -1,5 +1,6 @@
 package Controller;
 
+import java.util.List;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,6 +40,7 @@ public class SocialMediaController
         app.post("/register", this::postAccountHandler);
         app.post("/login", this::postLoginHandler);
         app.post("/messages", this::postMessageHandler);
+        app.get("/messages", this::getAllMessagesHandler);
         //app.get("/messages/{message_id}", this::exampleHandler);
         //app.get("/accounts/{account_id}/messages", this::exampleHandler);
 
@@ -71,6 +73,7 @@ public class SocialMediaController
     /**
      * Handler to post a login
      * @param ctx
+     * @throws JsonProcessingException will be thrown if there is an issue converting JSON into an object
      */
     private void postLoginHandler(Context ctx) throws JsonProcessingException
     {
@@ -88,6 +91,11 @@ public class SocialMediaController
         }
     }
 
+    /**
+     * Handler to post a new message
+     * @param ctx
+     * @throws JsonProcessingException will be thrown if there is an issue converting JSON into an object
+     */
     private void postMessageHandler(Context ctx) throws JsonProcessingException
     {
         ObjectMapper mapper = new ObjectMapper();
@@ -102,6 +110,17 @@ public class SocialMediaController
         {
             ctx.status(400);
         }
+    }
+
+    /**
+     * Handler to retrieve all messages
+     * @param ctx
+     * @throws JsonProcessingException will be thrown if there is an issue converting JSON into an object
+     */
+    private void getAllMessagesHandler(Context ctx) throws JsonProcessingException
+    {
+        List<Message> messages = messageService.getAllMessages();
+        ctx.json(messages);
     }
 
 

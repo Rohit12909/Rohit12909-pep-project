@@ -55,6 +55,10 @@ public class AccountService
         return null;
     }
 
+    /**
+     * Check if an account exists in the database
+     * @param account to search for in the database
+     */
     private boolean AccountExists(Account account)
     {
         List<Account> allAccounts = accountDAO.getAllAccounts();
