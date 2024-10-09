@@ -43,7 +43,7 @@ public class AccountDAO
      * @param acc
      * @return New Account Object
      */
-    public Account createAccount(Account acc)
+    public Account createAccount(Account account)
     {
         Connection connection = ConnectionUtil.getConnection();
 
@@ -53,17 +53,17 @@ public class AccountDAO
 
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            ps.setString(1, acc.getUsername());
-            ps.setString(2, acc.getPassword());
+            ps.setString(1, account.getUsername());
+            ps.setString(2, account.getPassword());
 
             ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
 
-            if (rs.next())
+            while (rs.next())
             {
                 int generated_account_id = (int) rs.getLong("account_id");
-                return new Account(generated_account_id, acc.getUsername(), acc.getPassword());
+                return new Account(generated_account_id, account.getUsername(), account.getPassword());
             }
 
         } catch (SQLException e)

@@ -16,7 +16,8 @@ import Service.MessageService;
  * found in readme.md as well as the test cases. You should
  * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
-public class SocialMediaController {
+public class SocialMediaController 
+{
     AccountService accountService;
     MessageService messageService;
 
@@ -31,12 +32,13 @@ public class SocialMediaController {
      * suite must receive a Javalin object from this method.
      * @return a Javalin app object which defines the behavior of the Javalin controller.
      */
-    public Javalin startAPI() {
+    public Javalin startAPI() 
+    {
         Javalin app = Javalin.create();
 
         app.post("/register", this::postAccountHandler);
         app.post("/login", this::postLoginHandler);
-        //app.get("/messages", this::exampleHandler);
+        app.post("/messages", this::postMessageHandler);
         //app.get("/messages/{message_id}", this::exampleHandler);
         //app.get("/accounts/{account_id}/messages", this::exampleHandler);
 
@@ -85,5 +87,23 @@ public class SocialMediaController {
             ctx.status(401);
         }
     }
+
+    private void postMessageHandler(Context ctx) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        Message createdMessage = messageService.createMessage(message);
+
+        if (createdMessage != null)
+        {
+            ctx.json(mapper.writeValueAsString(createdMessage));
+        }
+        else
+        {
+            ctx.status(400);
+        }
+    }
+
+
 
 }

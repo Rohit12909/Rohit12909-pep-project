@@ -1,5 +1,42 @@
 package Service;
 
-public class MessageService {
-    
+import Model.Message;
+import DAO.MessageDAO;
+
+import java.util.List;
+
+public class MessageService 
+{
+    private MessageDAO messageDAO;
+
+    /**
+     * no-args constructor for creating a new MessageService with a new MessageDAO
+     */
+    public MessageService()
+    {
+        messageDAO = new MessageDAO();
+    }
+
+    /**
+     * Constructor for an MessageService when an MessageDAO is provided
+     */
+    public MessageService(MessageDAO messageDAO)
+    {
+        this.messageDAO = messageDAO;
+    }
+
+    /**
+     * Create new message, check if the user who wrote the messages exists
+     */
+    public Message createMessage(Message message)
+    {
+        if (!message.getMessage_text().isBlank() && message.getMessage_text().length() <= 255 && message.getPosted_by() > 0)
+        {
+            return messageDAO.createMessage(message);
+        }
+        
+        return null;
+    }
+
+
 }
