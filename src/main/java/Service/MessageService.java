@@ -19,6 +19,7 @@ public class MessageService
 
     /**
      * Constructor for an MessageService when an MessageDAO is provided
+     * @param messageDAO
      */
     public MessageService(MessageDAO messageDAO)
     {
@@ -27,6 +28,7 @@ public class MessageService
 
     /**
      * Create new message, check if the user who wrote the messages exists
+     * @param message
      */
     public Message createMessage(Message message)
     {
@@ -48,10 +50,28 @@ public class MessageService
 
     /**
      * Get Message by its ID
+     * @param messageID
      */
     public Message getMessageByID(int messageID)
     {
         return messageDAO.getMessageByID(messageID);
+    }
+
+    /**
+     * Delete a Message by its ID
+     * @param message
+     */
+    public Message deleteMessageByID(int messageID)
+    {
+        Message message = getMessageByID(messageID);
+
+        if (message != null)
+        {
+            return messageDAO.deleteMessage(message);
+        }
+        
+        return null;
+        
     }
 
 }
