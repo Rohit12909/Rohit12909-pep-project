@@ -46,4 +46,12 @@ public class MessageService
         return messageDAO.getAllMessages();
     }
 
+    /**
+     * Get Message by its ID
+     */
+    public Message getMessageByID(int messageID)
+    {
+        return messageDAO.getMessageByID(messageID);
+    }
+
 }
