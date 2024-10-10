@@ -45,7 +45,8 @@ public class SocialMediaController
         app.get("/messages/{message_id}", this::getMessageByIDHandler);
 
         app.delete("/messages/{message_id}", this::deleteMessageByIDHandler);
-        //app.get("/accounts/{account_id}/messages", this::exampleHandler);
+
+        app.patch("/messages/{message_id}", this::patchMessageByIDHandler);
 
 
         return app;
@@ -162,7 +163,24 @@ public class SocialMediaController
         {
             ctx.json("");
         } 
+    }
 
+    private void patchMessageByIDHandler(Context ctx) throws JsonProcessingException
+    {
+        String newMessageText = ctx.body().toString();
+        newMessageText = newMessageText.substring(18);
+        newMessageText = newMessageText.substring(0, newMessageText.length() - 3);
+        
+        Message message = messageService.updateMessageByID(Integer.parseInt(ctx.pathParam("message_id")), newMessageText);
+
+        if (message != null)
+        {
+            ctx.json(message);
+        }
+        else
+        {
+            ctx.status(400);
+        } 
     }
 
 

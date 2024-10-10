@@ -71,7 +71,24 @@ public class MessageService
         }
         
         return null;
-        
+    }
+
+    /**
+     * Update message's text identified by its message_id
+     * @param messageID
+     * @param newMessageText
+     * @return updated message
+     */
+    public Message updateMessageByID(int messageID, String newMessageText)
+    {
+        Message message = getMessageByID(messageID);
+
+        if (message != null && !newMessageText.isEmpty() && !newMessageText.isBlank() && newMessageText.length() <= 255)
+        {
+            return messageDAO.updateMessage(message, newMessageText);
+        }
+
+        return null;
     }
 
 }
