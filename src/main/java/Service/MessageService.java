@@ -29,6 +29,7 @@ public class MessageService
     /**
      * Create new message, check if the user who wrote the messages exists
      * @param message
+     * @return newly created message
      */
     public Message createMessage(Message message)
     {
@@ -42,6 +43,7 @@ public class MessageService
 
     /**
      * Get All Messages
+     * @return all messages
      */
     public List<Message> getAllMessages()
     {
@@ -51,6 +53,7 @@ public class MessageService
     /**
      * Get Message by its ID
      * @param messageID
+     * @return message found by its ID
      */
     public Message getMessageByID(int messageID)
     {
@@ -60,6 +63,7 @@ public class MessageService
     /**
      * Delete a Message by its ID
      * @param message
+     * @return the message that was deleted
      */
     public Message deleteMessageByID(int messageID)
     {
@@ -89,6 +93,16 @@ public class MessageService
         }
 
         return null;
+    }
+
+    /**
+     * Get all messages from a particular user
+     * @param accountID
+     * @return a list of all messages from a particular user
+     */
+    public List<Message> getAllMessagesFromUser(int accountID)
+    {
+        return messageDAO.getAllMessagesFromUser(accountID);
     }
 
 }

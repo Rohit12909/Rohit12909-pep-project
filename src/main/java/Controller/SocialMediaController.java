@@ -37,21 +37,25 @@ public class SocialMediaController
     {
         Javalin app = Javalin.create();
 
+        // Post handlers
         app.post("/register", this::postAccountHandler);
         app.post("/login", this::postLoginHandler);
         app.post("/messages", this::postMessageHandler);
 
+        // Get Handlers
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageByIDHandler);
+        app.get("/accounts/{account_id}/messages", this::getAllMessagesFromUserHandler);
 
+        // Delete Handlers
         app.delete("/messages/{message_id}", this::deleteMessageByIDHandler);
 
+        // Patch Handlers
         app.patch("/messages/{message_id}", this::patchMessageByIDHandler);
 
 
         return app;
     }
-
 
     /**
      * Handler to post a new account
@@ -165,6 +169,11 @@ public class SocialMediaController
         } 
     }
 
+    /**
+     * Handler to update message found by its message_id
+     * @param ctx
+     * @throws JsonProcessingException
+     */
     private void patchMessageByIDHandler(Context ctx) throws JsonProcessingException
     {
         String newMessageText = ctx.body().toString();
@@ -181,6 +190,20 @@ public class SocialMediaController
         {
             ctx.status(400);
         } 
+    }
+
+    /**
+     * Handler to get all messages from a particular user
+     * @param ctx
+     * @throws JsonProcessingException
+     */
+    private void getAllMessagesFromUserHandler(Context ctx) throws JsonProcessingException
+    {
+        int accountID = Integer.parseInt(ctx.pathParam("account_id"));
+
+        List<Message> allMessagesFromUser = messageService.getAllMessagesFromUser(accountID);
+
+        ctx.json(allMessagesFromUser);
     }
 
 

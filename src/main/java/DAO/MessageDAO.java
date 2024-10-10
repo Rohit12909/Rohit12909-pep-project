@@ -51,6 +51,7 @@ public class MessageDAO
 
     /**
      * Get All Messages
+     * @return A list of all messages
      */
     public List<Message> getAllMessages()
     {
@@ -82,6 +83,7 @@ public class MessageDAO
     /**
      * Retrieve a message using its ID
      * @param messageID id used to identify the message to be returned
+     * @return Message that was found by its ID
      */
     public Message getMessageByID(int messageID)
     {
@@ -115,7 +117,7 @@ public class MessageDAO
     /**
      * Delete a message identified by a message ID
      * @param message
-     * @return
+     * @return The message that was deleted
      */
     public Message deleteMessage(Message message)
     {
@@ -186,5 +188,41 @@ public class MessageDAO
         }
 
         return null;
+    }
+
+    /**
+     * Retrieve all Messages from a particular user
+     * @param accountID
+     * @return a list of all messages from a particular user
+     */
+    public List<Message> getAllMessagesFromUser(int accountID)
+    {
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> allMessagesByUser = new ArrayList<>();
+
+        try
+        {
+            String sql = "select * from Message where posted_by = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, accountID);
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())
+            {
+                Message message = new Message(rs.getInt("message_id"), 
+                                              rs.getInt("posted_by"), 
+                                              rs.getString("message_text"), 
+                                              rs.getLong("time_posted_epoch"));
+                
+                allMessagesByUser.add(message);
+            }
+        } catch (SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+        return allMessagesByUser;
     }
 }
